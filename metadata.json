@@ -1,0 +1,6 @@
+{
+  "name": "Arranger Pro",
+  "description": "Professional arranger keyboard workstation with realistic console hardware, multi-touch piano, polyphonic sound engine, automatic accompaniment styles, registrations, and mixer.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
