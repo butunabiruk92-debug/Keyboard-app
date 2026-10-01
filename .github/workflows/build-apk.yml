@@ -10,7 +10,7 @@ permissions:
   contents: read
 
 concurrency:
-  group: android-apk-build-${{ github.ref }}
+  group: biruk-arranger-build-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
@@ -26,25 +26,28 @@ jobs:
         uses: actions/setup-java@v4
         with:
           distribution: temurin
-          java-version: "17"
-          cache: gradle
+          java-version: '17'
 
-      - name: Set up Android SDK
-        uses: android-actions/setup-android@v3
-
-      - name: Install Android SDK packages
+      - name: Accept Android SDK licenses
         run: |
           yes | sdkmanager --licenses >/dev/null || true
+
+      - name: Install required Android SDK packages
+        run: |
           sdkmanager "platform-tools" "platforms;android-36" "build-tools;36.0.0"
 
-      - name: Make Gradle wrapper executable
-        run: chmod +x ./gradlew
+      - name: Set up Gradle 9.3.1
+        uses: gradle/actions/setup-gradle@v6
+        with:
+          gradle-version: '9.3.1'
 
-      - name: Check Gradle
-        run: ./gradlew --version
+      - name: Verify Java and Gradle
+        run: |
+          java -version
+          gradle --version
 
-      - name: Build APK
-        run: ./gradlew :app:assembleDebug --stacktrace --no-daemon
+      - name: Build Debug APK
+        run: gradle :app:assembleDebug --stacktrace --no-daemon
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
